@@ -27,7 +27,7 @@ def get_parser() -> argparse.ArgumentParser:
                         choices=('cuda', 'cpu'))
     parser.add_argument('--seed', type=int, default=12345)
     parser.add_argument('--splits', type=str, nargs='+', default=[])
-    parser.add_argument('--max-epoch', type=int, default=300)
+    parser.add_argument('--max-epoch', type=int, default=1)
     parser.add_argument('--model-dir', type=str, default='../models/model')
     parser.add_argument('--log-file', type=str, default='log.txt')
     parser.add_argument('--lr', type=float, default=5e-5)
