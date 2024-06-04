@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 import argparse
-
+import wandb
 from .anchor_based.train import train as train_anchor_based
 from .anchor_free.train import train as train_anchor_free
 from .helpers import init_helper, data_helper
@@ -90,7 +90,10 @@ def main():
     trainer = get_trainer(args.model)
 
     data_helper.dump_yaml(vars(args), model_dir / 'args.yml')
-
+    
+    wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
+    run = wandb.init( project="video-summarization" )
+    
     for split_path in args.splits:
         split_path = Path(split_path)
         splits = data_helper.load_yaml(split_path)
@@ -99,7 +102,7 @@ def main():
         stats = data_helper.AverageMeter('fscore')
 
         for split_idx, split in enumerate(splits):
-            logger.info(f'Start training on {split_path.stem}: split {split_idx}')
+            # logger.info(f'Start training on {split_path.stem}: split {split_idx}')
             ckpt_path = data_helper.get_ckpt_path(model_dir, split_path, split_idx)
             fscore = trainer(args, split, ckpt_path)
             stats.update(fscore=fscore)
@@ -107,7 +110,8 @@ def main():
 
         results['mean'] = float(stats.fscore)
         data_helper.dump_yaml(results, model_dir / f'{split_path.stem}.yml')
-
+        
+        wandb.log({"split path": split_path.stem, "F-score": stats.fscore})
         logger.log(f'Training done on {split_path.stem}. F-score: {stats.fscore:.4f}')
     
 

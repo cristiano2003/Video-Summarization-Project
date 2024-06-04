@@ -6,14 +6,7 @@ def calc_cls_loss(pred: torch.Tensor,
                   test: torch.Tensor,
                   kind: str = 'focal'
                   ) -> torch.Tensor:
-    """Compute classification loss on both positive and negative samples.
-
-    :param pred: Predicted class. Sized [N, S].
-    :param test: Class label where 1 marks positive, -1 marks negative, and 0
-        marks ignored. Sized [N, S].
-    :param kind: Loss type. Choose from (focal, cross-entropy).
-    :return: Scalar loss value.
-    """
+    
     test = test.type(torch.long)
     num_pos = test.sum()
 
@@ -35,13 +28,7 @@ def iou_offset(offset_a: torch.Tensor,
                offset_b: torch.Tensor,
                eps: float = 1e-8
                ) -> torch.Tensor:
-    """Compute IoU offsets between multiple offset pairs.
-
-    :param offset_a: Offsets of N positions. Sized [N, 2].
-    :param offset_b: Offsets of N positions. Sized [N, 2].
-    :param eps: Small floating value to prevent division by zero.
-    :return: IoU values of N positions. Sized [N].
-    """
+    
     left_a, right_a = offset_a[:, 0], offset_a[:, 1]
     left_b, right_b = offset_b[:, 0], offset_b[:, 1]
 

@@ -6,12 +6,7 @@ from ..helpers import bbox_helper
 
 
 def get_anchors(seq_len: int, scales: List[int]) -> np.ndarray:
-    """Generate all multi-scale anchors for a sequence in center-width format.
-
-    :param seq_len: Sequence length.
-    :param scales: List of bounding box widths.
-    :return: All anchors in center-width format.
-    """
+    
     anchors = np.zeros((seq_len, len(scales), 2), dtype=np.int32)
     for pos in range(seq_len):
         for scale_idx, scale in enumerate(scales):
@@ -23,14 +18,7 @@ def get_pos_label(anchors: np.ndarray,
                   targets: np.ndarray,
                   iou_thresh: float
                   ) -> Tuple[np.ndarray, np.ndarray]:
-    """Generate positive samples for training.
-
-    :param anchors: List of CW anchors
-    :param targets: List of CW target bounding boxes
-    :param iou_thresh: If IoU between a target bounding box and any anchor is
-        higher than this threshold, the target is regarded as a positive sample.
-    :return: Class and location offset labels
-    """
+    
     seq_len, num_scales, _ = anchors.shape
     anchors = np.reshape(anchors, (seq_len * num_scales, 2))
 
@@ -51,13 +39,7 @@ def get_pos_label(anchors: np.ndarray,
 
 
 def get_neg_label(cls_label: np.ndarray, num_neg: int) -> np.ndarray:
-    """Generate random negative samples.
-
-    :param cls_label: Class labels including only positive samples.
-    :param num_neg: Number of negative samples.
-    :return: Label with original positive samples (marked by 1), negative
-        samples (marked by -1), and ignored samples (marked by 0)
-    """
+    
     seq_len, num_scales = cls_label.shape
     cls_label = cls_label.copy().reshape(-1)
     cls_label[cls_label < 0] = 0  # reset negative samples
@@ -72,12 +54,7 @@ def get_neg_label(cls_label: np.ndarray, num_neg: int) -> np.ndarray:
 
 
 def offset2bbox(offsets: np.ndarray, anchors: np.ndarray) -> np.ndarray:
-    """Convert predicted offsets to CW bounding boxes.
-
-    :param offsets: Predicted offsets.
-    :param anchors: Sequence anchors.
-    :return: Predicted bounding boxes.
-    """
+    
     offsets = offsets.reshape(-1, 2)
     anchors = anchors.reshape(-1, 2)
 
@@ -94,12 +71,7 @@ def offset2bbox(offsets: np.ndarray, anchors: np.ndarray) -> np.ndarray:
 
 
 def bbox2offset(bboxes: np.ndarray, anchors: np.ndarray) -> np.ndarray:
-    """Convert bounding boxes to offset labels.
 
-    :param bboxes: List of CW bounding boxes.
-    :param anchors: List of CW anchors.
-    :return: Offsets labels for training.
-    """
     bbox_center, bbox_width = bboxes[:, 0], bboxes[:, 1]
     anchor_center, anchor_width = anchors[:, 0], anchors[:, 1]
 
