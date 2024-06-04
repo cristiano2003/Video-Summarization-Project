@@ -112,7 +112,7 @@ def main():
         data_helper.dump_yaml(results, model_dir / f'{split_path.stem}.yml')
         
         wandb.log({"split path": split_path.stem, "F-score": stats.fscore})
-        logger.log(f'Training done on {split_path.stem}. F-score: {stats.fscore:.4f}')
+        # logger.log(f'Training done on {split_path.stem}. F-score: {stats.fscore:.4f}')
     
 
 if __name__ == '__main__':
