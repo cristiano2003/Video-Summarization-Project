@@ -104,10 +104,11 @@ def main():
         for split_idx, split in enumerate(splits):
             # logger.info(f'Start training on {split_path.stem}: split {split_idx}')
             ckpt_path = data_helper.get_ckpt_path(model_dir, split_path, split_idx)
-            fscore = trainer(wandb, args, split, ckpt_path)
+            fscore = trainer( args, split, ckpt_path)
             stats.update(fscore=fscore)
             results[f'split{split_idx}'] = float(fscore)
-
+            wandb.log({": "{epoch}/{args.max_epoch}", "F-score":  "{val_fscore:.4f}/{max_val_fscore:.4f}"})
+            
         results['mean'] = float(stats.fscore)
         data_helper.dump_yaml(results, model_dir / f'{split_path.stem}.yml')
         
