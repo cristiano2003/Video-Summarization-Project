@@ -7,7 +7,7 @@ from ..modules.models import build_base_model
 
 
 class DSNet(nn.Module):
-    def __init__(self, base_model, num_feature, num_hidden, anchor_scales,
+    def __init__(self, num_feature, num_hidden, anchor_scales,
                  num_head):
         super().__init__()
         self.anchor_scales = anchor_scales
