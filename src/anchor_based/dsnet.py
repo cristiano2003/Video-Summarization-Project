@@ -12,7 +12,7 @@ class DSNet(nn.Module):
         super().__init__()
         self.anchor_scales = anchor_scales
         self.num_scales = len(anchor_scales)
-        self.base_model = build_base_model(base_model, num_feature, num_head)
+        self.base_model = build_base_model(num_feature, num_head)
 
         self.roi_poolings = [nn.AvgPool1d(scale, stride=1, padding=scale // 2)
                              for scale in anchor_scales]
