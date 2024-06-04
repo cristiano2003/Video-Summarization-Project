@@ -69,62 +69,11 @@ class AttentionExtractor(MultiHeadAttention):
         return out
 
 
-class GCNExtractor(nn.Module):
-    def __init__(self, num_feature):
-        super().__init__()
-        from torch_geometric.nn import GCNConv
-        self.gcn = GCNConv(num_feature, num_feature)
-
-    def forward(self, x):
-        x = x.squeeze(0)
-        edge_indices, edge_weights = self.create_graph(x, keep_ratio=0.3)
-        out = self.gcn(x, edge_indices, edge_weights)
-        out = out.unsqueeze(0)
-        return out
-
-    @staticmethod
-    def create_graph(x, keep_ratio=0.3):
-        seq_len, _ = x.shape
-        keep_top_k = int(keep_ratio * seq_len * seq_len)
-
-        edge_weights = torch.matmul(x, x.t())
-        edge_weights = edge_weights - torch.eye(seq_len, seq_len).to(x.device)
-        edge_weights = edge_weights.view(-1)
-        edge_weights, edge_indices = torch.topk(
-            edge_weights, keep_top_k, sorted=False)
-
-        edge_indices = edge_indices.unsqueeze(0)
-        edge_indices = torch.cat(
-            [edge_indices / seq_len, edge_indices % seq_len])
-
-        return edge_indices, edge_weights
 
 
-class LSTMExtractor(nn.LSTM):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-    def forward(self, *inputs):
-        out, _ = super().forward(*inputs)
-        return out
-
-
-def build_base_model(base_type: str,
-                     num_feature: int,
-                     num_head: int
-                     ) -> nn.Module:
-    if base_type == 'linear':
-        base_model = nn.Linear(num_feature, num_feature)
-    elif base_type == 'lstm':
-        base_model = LSTMExtractor(num_feature, num_feature)
-    elif base_type == 'bilstm':
-        base_model = LSTMExtractor(num_feature, num_feature // 2,
-                                   bidirectional=True)
-    elif base_type == 'gcn':
-        base_model = GCNExtractor(num_feature)
-    elif base_type == 'attention':
-        base_model = AttentionExtractor(num_head, num_feature)
-    else:
-        raise ValueError(f'Invalid base model {base_type}')
+def build_base_model( num_feature: int, num_head: int) -> nn.Module:
+    
+    base_model = AttentionExtractor(num_head, num_feature)
 
     return base_model
