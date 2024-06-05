@@ -3,7 +3,7 @@ import logging
 import numpy as np
 import torch
 from torch import nn
- 
+import wandb
 from . import anchor_helper
 from .dsnet import DSNet
 from .losses import calc_cls_loss, calc_loc_loss
@@ -22,6 +22,11 @@ def xavier_init(module):
 
 
 def train( args, split, save_path):
+    wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
+    wandb.init(
+    project="my-awesome-project",
+    name="summe",
+)
     model = DSNet( num_feature=args.num_feature,
                   num_hidden=args.num_hidden, anchor_scales=args.anchor_scales,
                   num_head=args.num_head)
@@ -103,6 +108,7 @@ def train( args, split, save_path):
             max_val_fscore = val_fscore
             torch.save(model.state_dict(), str(save_path))
         
+        wandb.log({"F-score": val_fscore, "loss": stats.loss})
         logger.info(f'Epoch: {epoch}/{args.max_epoch} '
                     f'Loss: {stats.cls_loss:.4f}/{stats.loc_loss:.4f}/{stats.loss:.4f} '
                     f'F-score cur/max: {val_fscore:.4f}/{max_val_fscore:.4f}')
