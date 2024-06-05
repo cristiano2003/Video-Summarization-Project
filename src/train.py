@@ -91,8 +91,8 @@ def main():
 
     data_helper.dump_yaml(vars(args), model_dir / 'args.yml')
     
-    wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
-    run = wandb.init( project="video-summarization" )
+    # wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
+    # run = wandb.init( project="video-summarization" )
     
     for split_path in args.splits:
         split_path = Path(split_path)
@@ -107,7 +107,7 @@ def main():
             fscore = trainer( args, split, ckpt_path)
             stats.update(fscore=fscore)
             results[f'split{split_idx}'] = float(fscore)
-            wandb.log({": "{epoch}/{args.max_epoch}", "F-score":  "{val_fscore:.4f}/{max_val_fscore:.4f}"})
+            # wandb.log({": "{epoch}/{args.max_epoch}", "F-score":  "{val_fscore:.4f}/{max_val_fscore:.4f}"})
             
         results['mean'] = float(stats.fscore)
         data_helper.dump_yaml(results, model_dir / f'{split_path.stem}.yml')
