@@ -132,7 +132,7 @@ def test_knapsack_dp():
 
 osolver = pywrapknapsack_solver.KnapsackSolver(
     # pywrapknapsack_solver.KnapsackSolver.KNAPSACK_MULTIDIMENSION_BRANCH_AND_BOUND_SOLVER,
-    pywrapknapsack_solver.KnapsackSolver.KNAPSACK_DYNAMIC_PROGRAMMING_SOLVER,
+    pywrapknapsack_solver.KNAPSACK_DYNAMIC_PROGRAMMING_SOLVER,
     'test')
 
 def knapsack_ortools(values, weights, items, capacity ):
