@@ -18,7 +18,7 @@ def get_ctr_label(target: np.ndarray,
                   eps: float = 1e-8
                   ) -> np.ndarray:
     
-    target = np.asarray(target, dtype=np.bool)
+    target = np.asarray(target, dtype=bool)
     ctr_label = np.zeros(target.shape, dtype=np.float32)
 
     offset_left, offset_right = offset[target, 0], offset[target, 1]
