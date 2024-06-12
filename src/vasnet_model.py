@@ -4,8 +4,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from config import  *
-from layer_norm import  *
+from .config import  *
+from .layer_norm import  *
 
 
 

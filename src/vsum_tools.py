@@ -16,7 +16,7 @@ Modifications by Jiri Fajtl
 
 import numpy as np
 #from knapsack import knapsack_dp
-from knapsack import knapsack_ortools
+from .knapsack import knapsack_ortools
 import math
 
 
