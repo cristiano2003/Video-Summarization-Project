@@ -24,7 +24,7 @@ def xavier_init(module):
 def train( args, split, save_path):
     wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
     wandb.init(
-    project="my-awesome-project",
+    project="video-summarization",
     name="summe",
 )
     model = DSNet( num_feature=args.num_feature,
