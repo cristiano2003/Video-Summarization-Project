@@ -11,7 +11,7 @@ import json
 import torch.nn.init as init
 import os
 import sys
-
+from .helpers.data_helper import *
 from .config import  *
 from .vasnet_model import *
 from .sys_utils import *
@@ -38,8 +38,8 @@ def parse_splits_filename(splits_filename):
 
     # Get number of discrete splits within each split json file
     with open(splits_filename, 'r') as sf:
-        splits = json.load(sf)
-
+        # plits = json.load(sf)
+        splits = load_yaml(splits_filename)
     return dataset_name, dataset_type, splits
 
 def lookup_weights_splits_file(path, dataset_name, dataset_type, split_id):
