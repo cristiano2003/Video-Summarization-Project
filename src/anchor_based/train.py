@@ -3,11 +3,10 @@ import logging
 import torch
 import wandb
 from . import anchor_free_helper
-from .dsnet_af import DSNetAF
+from .dsnet import DSNet
 from .losses import calc_ctr_loss, calc_cls_loss, calc_loc_loss
 from ..evaluate import evaluate
 from ..helpers import data_helper, vsumm_helper
-
 
 
 
@@ -16,10 +15,10 @@ def train(args, split, save_path):
     wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
     wandb.init(
     project="video-summarization",
-    name=f"anchor-free-{args.dataset}",
+    name=f"anchor-based-{args.dataset}",
 )
     
-    model = DSNetAF( num_feature=args.num_feature,
+    model = DSNet( num_feature=args.num_feature,
                     num_hidden=args.num_hidden, num_head=args.num_head)
     model = model.to(args.device)
 
