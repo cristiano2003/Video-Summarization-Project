@@ -139,7 +139,7 @@ def knapsack_ortools(values, weights, items, capacity ):
     scale = 1000
     values = np.array(values)
     weights = np.array(weights)
-    values = (values * scale).astype(np.int)
+    values = (values * scale).astype(np.int32)
     weights = (weights).astype(np.int)
     capacity = capacity
 
