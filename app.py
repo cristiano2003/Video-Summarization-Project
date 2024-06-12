@@ -16,7 +16,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
     # model type
-    parser.add_argument('model', type=str,
+    parser.add_argument('--model', type=str,
                         choices=('anchor-based', 'anchor-free'), default='anchor-based')
     parser.add_argument('--dataset', type=str, default='tvsum')
     # training & evaluation
