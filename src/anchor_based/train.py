@@ -2,7 +2,7 @@ import logging
 
 import torch
 import wandb
-from . import anchor_based_helper
+from . import anchor_helper
 from .dsnet import DSNet
 from .losses import calc_ctr_loss, calc_cls_loss, calc_loc_loss
 from ..evaluate import evaluate
@@ -52,8 +52,8 @@ def train(args, split, save_path):
             seq = torch.tensor(seq, dtype=torch.float32).unsqueeze(0).to(args.device)
 
             cls_label = target
-            loc_label = anchor_based_helper.get_loc_label(target)
-            ctr_label = anchor_based_helper.get_ctr_label(target, loc_label)
+            loc_label = anchor_helper.get_loc_label(target)
+            ctr_label = anchor_helper.get_ctr_label(target, loc_label)
 
             pred_cls, pred_loc, pred_ctr = model(seq)
 

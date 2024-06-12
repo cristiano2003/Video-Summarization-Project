@@ -118,10 +118,43 @@ def main():
     cap.release()
 
 
+import cv2
+
+def write_mp4(input_file, output_file):
+    # Open the input video file
+    cap = cv2.VideoCapture(input_file)
+
+    # Get video properties
+    fps = int(cap.get(cv2.CAP_PROP_FPS))
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+    # Define the codec and create VideoWriter object
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Define the codec (H264 in this case)
+    out = cv2.VideoWriter(output_file, fourcc, fps, (width, height))
+
+    # Read until video is completed
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if ret==True:
+            # Write the frame into the output file
+            out.write(frame)
+        else:
+            break
+
+    # Release everything if job is finished
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
+
+
 
 
 def video_identity(video):
-    return video
+    write_mp4(video, 'input_video.mp4')
+    main()
+    
+    return 'output.mp4'
 
 
 demo = gr.Interface(video_identity, 
