@@ -1,17 +1,24 @@
 import logging
 
 import torch
-
+import wandb
 from . import anchor_free_helper
 from .dsnet_af import DSNetAF
 from .losses import calc_ctr_loss, calc_cls_loss, calc_loc_loss
 from ..evaluate import evaluate
 from ..helpers import data_helper, vsumm_helper
 
-logger = logging.getLogger()
+
 
 
 def train(args, split, save_path):
+    
+    wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
+    wandb.init(
+    project="video-summarization",
+    name="anchor-based",
+)
+    
     model = DSNetAF(base_model=args.base_model, num_feature=args.num_feature,
                     num_hidden=args.num_hidden, num_head=args.num_head)
     model = model.to(args.device)
@@ -75,8 +82,6 @@ def train(args, split, save_path):
             max_val_fscore = val_fscore
             torch.save(model.state_dict(), str(save_path))
 
-        logger.info(f'Epoch: {epoch}/{args.max_epoch} '
-                    f'Loss: {stats.cls_loss:.4f}/{stats.loc_loss:.4f}/{stats.ctr_loss:.4f}/{stats.loss:.4f} '
-                    f'F-score cur/max: {val_fscore:.4f}/{max_val_fscore:.4f}')
+        wandb.log({"val F-score": val_fscore, "loss": stats.loss, "Epoch": epoch})
 
     return max_val_fscore

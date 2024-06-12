@@ -10,7 +10,6 @@ from .losses import calc_cls_loss, calc_loc_loss
 from ..evaluate import evaluate
 from ..helpers import data_helper, vsumm_helper, bbox_helper
 
-logger = logging.getLogger()
 
 
 def xavier_init(module):
@@ -25,7 +24,7 @@ def train( args, split, save_path):
     wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
     wandb.init(
     project="video-summarization",
-    name="summe",
+    name="anchor-based",
 )
     model = DSNet( num_feature=args.num_feature,
                   num_hidden=args.num_hidden, anchor_scales=args.anchor_scales,
@@ -103,14 +102,11 @@ def train( args, split, save_path):
                          loc_loss=loc_loss.item())
 
         val_fscore, _ = evaluate(model, val_loader, args.nms_thresh, args.device)
-
+        
         if max_val_fscore < val_fscore:
             max_val_fscore = val_fscore
             torch.save(model.state_dict(), str(save_path))
         
-        wandb.log({"F-score": val_fscore, "loss": stats.loss})
-        logger.info(f'Epoch: {epoch}/{args.max_epoch} '
-                    f'Loss: {stats.cls_loss:.4f}/{stats.loc_loss:.4f}/{stats.loss:.4f} '
-                    f'F-score cur/max: {val_fscore:.4f}/{max_val_fscore:.4f}')
+        wandb.log({"val F-score": val_fscore, "loss": stats.loss, "Epoch": epoch})
 
     return max_val_fscore
