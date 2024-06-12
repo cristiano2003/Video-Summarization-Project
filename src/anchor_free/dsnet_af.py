@@ -5,9 +5,9 @@ from ..modules.models import build_base_model
 
 
 class DSNetAF(nn.Module):
-    def __init__(self, base_model, num_feature, num_hidden, num_head):
+    def __init__(self,  num_feature, num_hidden, num_head):
         super().__init__()
-        self.base_model = build_base_model(base_model, num_feature, num_head)
+        self.base_model = build_base_model(num_feature, num_head)
         self.layer_norm = nn.LayerNorm(num_feature)
 
         self.fc1 = nn.Sequential(
