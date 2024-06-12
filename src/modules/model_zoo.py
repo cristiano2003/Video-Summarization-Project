@@ -2,13 +2,13 @@ from ..anchor_based.dsnet import DSNet
 from ..anchor_free.dsnet_af import DSNetAF
 
 
-def get_anchor_based(base_model, num_feature, num_hidden, anchor_scales,
+def get_anchor_based(num_feature, num_hidden, anchor_scales,
                      num_head, **kwargs):
-    return DSNet(base_model, num_feature, num_hidden, anchor_scales, num_head)
+    return DSNet( num_feature, num_hidden, anchor_scales, num_head)
 
 
-def get_anchor_free(base_model, num_feature, num_hidden, num_head, **kwargs):
-    return DSNetAF(base_model, num_feature, num_hidden, num_head)
+def get_anchor_free( num_feature, num_hidden, num_head, **kwargs):
+    return DSNetAF(num_feature, num_hidden, num_head)
 
 
 def get_model(model_type, **kwargs):
