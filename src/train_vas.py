@@ -12,7 +12,9 @@ import torch.nn.init as init
 import os
 import sys
 
-from config import  *
+from .config import  *
+from .vasnet_model import *
+from .sys_utils import *
 
 
 def weights_init(m):
