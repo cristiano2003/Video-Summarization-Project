@@ -16,7 +16,7 @@ def train(args, split, save_path):
     wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
     wandb.init(
     project="video-summarization",
-    name="anchor-free",
+    name="anchor-free-{args.dataset}",
 )
     
     model = DSNetAF( num_feature=args.num_feature,
