@@ -24,7 +24,7 @@ def train( args, split, save_path):
     wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
     wandb.init(
     project="video-summarization",
-    name="anchor-based",
+    name=f"anchor-based-{args.dataset}",
 )
     model = DSNet( num_feature=args.num_feature,
                   num_hidden=args.num_hidden, anchor_scales=args.anchor_scales,

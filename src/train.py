@@ -21,7 +21,7 @@ def get_parser() -> argparse.ArgumentParser:
     # model type
     parser.add_argument('model', type=str,
                         choices=('anchor-based', 'anchor-free'))
-
+    parser.add_argument('--dataset', type=str, default='tvsum')
     # training & evaluation
     parser.add_argument('--device', type=str, default='cuda',
                         choices=('cuda', 'cpu'))
