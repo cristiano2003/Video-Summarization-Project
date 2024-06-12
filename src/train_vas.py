@@ -11,7 +11,7 @@ import json
 import torch.nn.init as init
 import os
 import sys
-from .helpers.data_helper import *
+
 from .config import  *
 from .vasnet_model import *
 from .sys_utils import *
@@ -37,10 +37,9 @@ def parse_splits_filename(splits_filename):
         dataset_type = ''
 
     # Get number of discrete splits within each split json file
-    # with open(splits_filename, 'r') as sf:
-        # plits = json.load(sf)
-        
-    splits = load_yaml(splits_filename)
+    with open(splits_filename, 'r') as sf:
+        splits = json.load(sf)
+
     return dataset_name, dataset_type, splits
 
 def lookup_weights_splits_file(path, dataset_name, dataset_type, split_id):
@@ -390,7 +389,7 @@ def train(hps):
     os.makedirs(os.path.join(hps.output_dir, 'splits'), exist_ok=True)
     os.makedirs(os.path.join(hps.output_dir, 'code'), exist_ok=True)
     os.makedirs(os.path.join(hps.output_dir, 'models'), exist_ok=True)
-    os.system('cp -f splits/*.yml  ' + hps.output_dir + '/splits/')
+    os.system('cp -f splits/*.json  ' + hps.output_dir + '/splits/')
     os.system('cp *.py ' + hps.output_dir + '/code/')
 
     # Create a file to collect results from all splits
