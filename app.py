@@ -33,10 +33,10 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--nms-thresh', type=float, default=0.5)
 
     # inference
-    parser.add_argument('--ckpt-path', type=str, default=None)
+    parser.add_argument('--ckpt-path', type=str, default="checkpoint/summe.yml.0.pt")
     parser.add_argument('--sample-rate', type=int, default=15)
-    parser.add_argument('--source', type=str, default=None)
-    parser.add_argument('--save-path', type=str, default=None)
+    parser.add_argument('--source', type=str, default="input_video.mp4")
+    parser.add_argument('--save-path', type=str, default="output.mp4")
 
     parser.add_argument('--num-head', type=int, default=8)
     parser.add_argument('--num-feature', type=int, default=1024)
