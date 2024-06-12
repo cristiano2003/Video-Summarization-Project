@@ -19,7 +19,7 @@ def train(args, split, save_path):
     name="anchor-free",
 )
     
-    model = DSNetAF(base_model=args.base_model, num_feature=args.num_feature,
+    model = DSNetAF( num_feature=args.num_feature,
                     num_hidden=args.num_hidden, num_head=args.num_head)
     model = model.to(args.device)
 
