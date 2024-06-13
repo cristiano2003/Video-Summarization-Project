@@ -33,7 +33,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--nms-thresh', type=float, default=0.5)
 
     # inference
-    parser.add_argument('--ckpt-path', type=str, default="checkpoint/summe.yml.0.pt")
+    parser.add_argument('--ckpt-path', type=str, default="checkpoint/tvsum.yml.0.pt")
     parser.add_argument('--sample-rate', type=int, default=15)
     parser.add_argument('--source', type=str, default="input_video.mp4")
     parser.add_argument('--save-path', type=str, default="output.mp4")
@@ -61,9 +61,16 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main(model):
     parser  =  get_parser()
     args = parser.parse_args()
+    if model == 'Anchor-based': 
+        args.model = 'anchor-based'
+        args.ckpt_path = 'checkpoint/summe.yml.1.pt'
+        
+    else: 
+        args.model = 'anchor-free'
+        args.ckpt_path = 'checkpoint_af/summe.yml.1.pt'
     
     # load model
     print('Loading DSNet model ...')
@@ -150,16 +157,18 @@ def write_mp4(input_file, output_file):
 
 
 
-def video_identity(video):
+def video_identity(video, model):
     write_mp4(video, 'input_video.mp4')
-    main()
+    main(model)
     
     return 'output.mp4'
 
+model_options = ['Anchor-based', 'Anchor-free'] 
 
 demo = gr.Interface(video_identity, 
-                    gr.Video(), 
-                    "playable_video", 
+                     [gr.Video(), gr.Dropdown(choices=model_options, label="Select Model")],
+                    "playable_video",
+                     title="Video Summarization"
                     )
 
 if __name__ == "__main__":
