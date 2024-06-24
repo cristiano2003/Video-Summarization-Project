@@ -7,7 +7,6 @@ from ..evaluate import evaluate
 from ..helpers import data_helper, vsumm_helper
 
 
-
 def train(args, split, save_path, key):
     if key:
         wandb.login(key=key)

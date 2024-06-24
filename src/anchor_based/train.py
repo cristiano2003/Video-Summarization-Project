@@ -19,9 +19,8 @@ def xavier_init(module):
 
 
 def train(args, split, save_path, key):
-    
     if key:
-        wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
+        wandb.login(key=key)
         wandb.init(
         project="video-summarization",
         name=f"anchor-free-{args.dataset}")
