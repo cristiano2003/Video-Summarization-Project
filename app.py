@@ -154,7 +154,6 @@ def write_mp4(input_file, output_file):
 
 
 
-
 def video_identity(video, model):
     write_mp4(video, 'input_video.mp4')
     main(model)
