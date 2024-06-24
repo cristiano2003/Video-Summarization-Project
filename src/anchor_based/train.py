@@ -10,7 +10,6 @@ from ..evaluate import evaluate
 from ..helpers import data_helper, vsumm_helper, bbox_helper
 
 
-
 def xavier_init(module):
     cls_name = module.__class__.__name__
     if 'Linear' in cls_name or 'Conv' in cls_name:
@@ -19,12 +18,14 @@ def xavier_init(module):
             nn.init.constant_(module.bias, 0.1)
 
 
-def train(args, split, save_path):
+def train(args, split, save_path, key):
     
-    wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
-    wandb.init(
-    project="video-summarization",
-    name=f"anchor-free-{args.dataset}")
+    if key:
+        wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
+        wandb.init(
+        project="video-summarization",
+        name=f"anchor-free-{args.dataset}")
+        
     model = DSNet( num_feature=args.num_feature,
                   num_hidden=args.num_hidden, anchor_scales=args.anchor_scales,
                   num_head=args.num_head)
@@ -105,8 +106,9 @@ def train(args, split, save_path):
         if max_val_fscore < val_fscore:
             max_val_fscore = val_fscore
             torch.save(model.state_dict(), str(save_path))
-
-        wandb.log({"val F-score": val_fscore, "loss": stats.loss, "Epoch": epoch})
+            
+        if key:
+            wandb.log({"val F-score": val_fscore, "loss": stats.loss, "Epoch": epoch})
 
 
     return max_val_fscore

@@ -8,12 +8,12 @@ from ..helpers import data_helper, vsumm_helper
 
 
 
-def train(args, split, save_path):
-    
-    wandb.login(key="53f5746150b2ce7b0552996cb6acc3beec6e487f")
-    wandb.init(
-    project="video-summarization",
-    name=f"anchor-free-{args.dataset}",
+def train(args, split, save_path, key):
+    if key:
+        wandb.login(key=key)
+        wandb.init(
+        project="video-summarization",
+        name=f"anchor-free-{args.dataset}",
 )
     
     model = DSNetAF( num_feature=args.num_feature,
@@ -78,7 +78,8 @@ def train(args, split, save_path):
         if max_val_fscore < val_fscore:
             max_val_fscore = val_fscore
             torch.save(model.state_dict(), str(save_path))
-
-        wandb.log({"val F-score": val_fscore, "loss": stats.loss, "Epoch": epoch})
+        
+        if key:
+            wandb.log({"val F-score": val_fscore, "loss": stats.loss, "Epoch": epoch})
 
     return max_val_fscore

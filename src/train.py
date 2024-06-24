@@ -52,6 +52,8 @@ def get_parser() -> argparse.ArgumentParser:
                         choices=['focal', 'cross-entropy'])
     parser.add_argument('--reg-loss', type=str, default='soft-iou',
                         choices=['soft-iou', 'smooth-l1'])
+    
+    parser.add_argument('--wandb-key', '-wk', type = str, default=None)
 
     return parser
 
@@ -93,7 +95,7 @@ def main():
         for split_idx, split in enumerate(splits):
             # logger.info(f'Start training on {split_path.stem}: split {split_idx}')
             ckpt_path = data_helper.get_ckpt_path(model_dir, split_path, split_idx)
-            fscore = trainer( args, split, ckpt_path)
+            fscore = trainer( args, split, ckpt_path, args.wandb_key)
             stats.update(fscore=fscore)
             results[f'split{split_idx}'] = float(fscore)
             
