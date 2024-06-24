@@ -50,15 +50,7 @@ def calc_loc_loss(pred_loc: torch.Tensor,
                   kind: str = 'soft-iou',
                   eps: float = 1e-8
                   ) -> torch.Tensor:
-    """Compute soft IoU loss for regression only on positive samples.
 
-    :param pred_loc: Predicted offsets. Sized [N, 2].
-    :param test_loc: Ground truth offsets. Sized [N, 2].
-    :param cls_label: Class label specifying positive samples.
-    :param kind: Loss type. Choose from (soft-iou, smooth-l1).
-    :param eps: Small floating value to prevent division by zero.
-    :return: Scalar loss value.
-    """
     cls_label = cls_label.type(torch.bool)
     pred_loc = pred_loc[cls_label]
     test_loc = test_loc[cls_label]
@@ -85,12 +77,7 @@ def calc_ctr_loss(pred, test, pos_mask):
 
 
 def one_hot_embedding(labels: torch.Tensor, num_classes: int) -> torch.Tensor:
-    """Embedding labels to one-hot form.
 
-    :param labels: Class labels. Sized [N].
-    :param num_classes: Number of classes.
-    :return: One-hot encoded labels. sized [N, #classes].
-    """
     eye = torch.eye(num_classes, device=labels.device)
     return eye[labels]
 
@@ -101,16 +88,7 @@ def focal_loss(x: torch.Tensor,
                gamma: float = 2,
                reduction: str = 'sum'
                ) -> torch.Tensor:
-    """Compute focal loss for binary classification.
-        FL(p_t) = -alpha_t * (1 - p_t)^gamma * log(p_t)
-
-    :param x: Predicted confidence. Sized [N, D].
-    :param y: Ground truth label. Sized [N].
-    :param alpha: Alpha parameter in focal loss.
-    :param gamma: Gamma parameter in focal loss.
-    :param reduction: Aggregation type. Choose from (sum, mean, none).
-    :return: Scalar loss value.
-    """
+    
     _, num_classes = x.shape
 
     t = one_hot_embedding(y, num_classes)

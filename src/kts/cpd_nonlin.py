@@ -2,9 +2,7 @@ import numpy as np
 
 
 def calc_scatters(K):
-    """Calculate scatter matrix: scatters[i,j] = {scatter of the sequence with
-    starting frame i and ending frame j}
-    """
+    
     n = K.shape[0]
     K1 = np.cumsum([0] + list(np.diag(K)))
     K2 = np.zeros((n + 1, n + 1))

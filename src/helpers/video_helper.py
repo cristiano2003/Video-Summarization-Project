@@ -72,7 +72,6 @@ class VideoPreprocessor(object):
         seq_len = len(features)
         picks = np.arange(0, seq_len) * self.sample_rate
 
-        # compute change points using KTS
         kernel = np.matmul(features, features.T)
         change_points, _ = cpd_auto(kernel, seq_len - 1, 1, verbose=False)
         change_points *= self.sample_rate

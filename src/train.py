@@ -7,7 +7,6 @@ from .anchor_free.train import train as train_anchor_free
 from .helpers import init_helper, data_helper
 import torch
 
-logger = logging.getLogger()
 
 import numpy as np
 TRAINER = {
@@ -18,11 +17,9 @@ TRAINER = {
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
-    # model type
     parser.add_argument('model', type=str,
                         choices=('anchor-based', 'anchor-free'))
     parser.add_argument('--dataset', type=str, default='tvsum')
-    # training & evaluation
     parser.add_argument('--device', type=str, default='cuda',
                         choices=('cuda', 'cpu'))
     parser.add_argument('--seed', type=int, default=12345)
@@ -35,17 +32,14 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--lambda-reg', type=float, default=1.0)
     parser.add_argument('--nms-thresh', type=float, default=0.5)
 
-    # inference
     parser.add_argument('--ckpt-path', type=str, default=None)
     parser.add_argument('--sample-rate', type=int, default=15)
     parser.add_argument('--source', type=str, default=None)
     parser.add_argument('--save-path', type=str, default=None)
-
     parser.add_argument('--num-head', type=int, default=8)
     parser.add_argument('--num-feature', type=int, default=1024)
     parser.add_argument('--num-hidden', type=int, default=128)
 
-    # anchor based
     parser.add_argument('--neg-sample-ratio', type=float, default=2.0)
     parser.add_argument('--incomplete-sample-ratio', type=float, default=1.0)
     parser.add_argument('--pos-iou-thresh', type=float, default=0.6)
@@ -53,8 +47,6 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--incomplete-iou-thresh', type=float, default=0.3)
     parser.add_argument('--anchor-scales', type=int, nargs='+',
                         default=[4, 8, 16, 32])
-
-    # anchor free
     parser.add_argument('--lambda-ctr', type=float, default=1.0)
     parser.add_argument('--cls-loss', type=str, default='focal',
                         choices=['focal', 'cross-entropy'])
@@ -81,7 +73,6 @@ def main():
     init_helper.init_logger(args.model_dir, args.log_file)
     init_helper.set_random_seed(args.seed)
 
-    logger.info(vars(args))
 
     model_dir = Path(args.model_dir)
     model_dir.mkdir(parents=True, exist_ok=True)

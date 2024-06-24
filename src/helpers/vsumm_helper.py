@@ -5,12 +5,6 @@ from ortools.algorithms.python import knapsack_solver as ks
 
 
 def f1_score(pred: np.ndarray, test: np.ndarray) -> float:
-    """Compute F1-score on binary classification task.
-
-    :param pred: Predicted binary label. Sized [N].
-    :param test: Ground truth binary label. Sized [N].
-    :return: F1-score value.
-    """
     assert pred.shape == test.shape
     pred = np.asarray(pred, dtype=bool)
     test = np.asarray(test, dtype=bool)
@@ -27,13 +21,6 @@ def knapsack(values: Iterable[int],
              weights: Iterable[int],
              capacity: int
              ) -> List[int]:
-    """Solve 0/1 knapsack problem using dynamic programming.
-
-    :param values: Values of each items. Sized [N].
-    :param weights: Weights of each items. Sized [N].
-    :param capacity: Total capacity of the knapsack.
-    :return: List of packed item indices.
-    """
     knapsack_solver = ks.KnapsackSolver(
         ks.KNAPSACK_DYNAMIC_PROGRAMMING_SOLVER, 'test'
     )
@@ -51,7 +38,6 @@ def knapsack(values: Iterable[int],
 
 
 def downsample_summ(summ: np.ndarray) -> np.ndarray:
-    """Down-sample the summary by 15 times"""
     return summ[::15]
 
 
@@ -62,16 +48,6 @@ def get_keyshot_summ(pred: np.ndarray,
                      picks: np.ndarray,
                      proportion: float = 0.15
                      ) -> np.ndarray:
-    """Generate keyshot-based video summary i.e. a binary vector.
-
-    :param pred: Predicted importance scores.
-    :param cps: Change points, 2D matrix, each row contains a segment.
-    :param n_frames: Original number of frames.
-    :param nfps: Number of frames per segment.
-    :param picks: Positions of subsampled frames in the original video.
-    :param proportion: Max length of video summary compared to original length.
-    :return: Generated keyshot-based summary.
-    """
     assert pred.shape == picks.shape
     picks = np.asarray(picks, dtype=np.int32)
 
@@ -109,7 +85,7 @@ def bbox2summary(seq_len: int,
                  nfps: np.ndarray,
                  picks: np.ndarray
                  ) -> np.ndarray:
-    """Convert predicted bounding boxes to summary"""
+
     score = np.zeros(seq_len, dtype=np.float32)
     for bbox_idx in range(len(pred_bboxes)):
         lo, hi = pred_bboxes[bbox_idx, 0], pred_bboxes[bbox_idx, 1]
@@ -122,12 +98,7 @@ def bbox2summary(seq_len: int,
 def get_summ_diversity(pred_summ: np.ndarray,
                        features: np.ndarray
                        ) -> float:
-    """Evaluate diversity of the generated summary.
-
-    :param pred_summ: Predicted down-sampled summary. Sized [N, F].
-    :param features: Normalized down-sampled video features. Sized [N, F].
-    :return: Diversity value.
-    """
+    
     assert len(pred_summ) == len(features)
     pred_summ = np.asarray(pred_summ, dtype=bool)
     pos_features = features[pred_summ]
@@ -147,13 +118,7 @@ def get_summ_f1score(pred_summ: np.ndarray,
                      test_summ: np.ndarray,
                      eval_metric: str = 'avg'
                      ) -> float:
-    """Compare predicted summary with ground truth summary (keyshot-based).
 
-    :param pred_summ: Predicted binary label of N frames. Sized [N].
-    :param test_summ: Ground truth binary labels of U users. Sized [U, N].
-    :param eval_metric: Evaluation method. Choose from (max, avg).
-    :return: F1-score value.
-    """
     pred_summ = np.asarray(pred_summ, dtype=bool)
     test_summ = np.asarray(test_summ, dtype=bool)
     _, n_frames = test_summ.shape

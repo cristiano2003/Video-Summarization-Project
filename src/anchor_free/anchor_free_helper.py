@@ -2,7 +2,6 @@ import numpy as np
 
 from ..helpers import bbox_helper
 
-
 def get_loc_label(target: np.ndarray) -> np.ndarray:
     
     seq_len, = target.shape

@@ -4,17 +4,7 @@ from .cpd_nonlin import cpd_nonlin
 
 
 def cpd_auto(K, ncp, vmax, desc_rate=1, **kwargs):
-    """Detect change points automatically selecting their number
-
-    :param K: Kernel between each pair of frames in video
-    :param ncp: Maximum number of change points
-    :param vmax: Special parameter
-    :param desc_rate: Rate of descriptor sampling, vmax always corresponds to 1x
-    :param kwargs: Extra parameters for ``cpd_nonlin``
-    :return: Tuple (cps, costs)
-        - cps - best selected change-points
-        - costs - costs for 0,1,2,...,m change-points
-    """
+    
     m = ncp
     _, scores = cpd_nonlin(K, m, backtrack=False, **kwargs)
 

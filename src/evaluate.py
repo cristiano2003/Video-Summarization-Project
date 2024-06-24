@@ -1,13 +1,9 @@
 import logging
 from pathlib import Path
-
 import numpy as np
 import torch
-
 from .helpers import init_helper, data_helper, vsumm_helper, bbox_helper
-from .modules.model_zoo import get_model
-
-logger = logging.getLogger()
+from .modules.model_get import get_model
 
 
 def evaluate(model, val_loader, nms_thresh, device):
@@ -44,7 +40,6 @@ def main():
     init_helper.init_logger(args.model_dir, args.log_file)
     init_helper.set_random_seed(args.seed)
 
-    logger.info(vars(args))
     model = get_model(args.model, **vars(args))
     model = model.eval().to(args.device)
 
@@ -65,12 +60,6 @@ def main():
 
             fscore, diversity = evaluate(model, val_loader, args.nms_thresh, args.device)
             stats.update(fscore=fscore, diversity=diversity)
-
-            logger.info(f'{split_path.stem} split {split_idx}: diversity: '
-                        f'{diversity:.4f}, F-score: {fscore:.4f}')
-
-        logger.info(f'{split_path.stem}: diversity: {stats.diversity:.4f}, '
-                    f'F-score: {stats.fscore:.4f}')
 
 
 if __name__ == '__main__':

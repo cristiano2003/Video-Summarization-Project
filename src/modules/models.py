@@ -1,5 +1,4 @@
 import math
-
 import torch
 from torch import nn
 
@@ -67,8 +66,6 @@ class AttentionExtractor(MultiHeadAttention):
     def forward(self, *inputs):
         out, _ = super().forward(*inputs)
         return out
-
-
 
 
 

@@ -7,9 +7,7 @@ import numpy as np
 import torch
 import argparse
 from src.helpers import init_helper, vsumm_helper, bbox_helper, video_helper
-from src.modules.model_zoo import get_model
-
-
+from src.modules.model_get import get_model
 
 
 def get_parser() -> argparse.ArgumentParser:

@@ -6,11 +6,6 @@ import numpy as np
 
 
 def lr2cw(bbox_lr: np.ndarray) -> np.ndarray:
-    """Convert bounding boxes from left-right (LR) to center-width (CW) format.
-
-    :param bbox_lr: LR bounding boxes. Sized [N, 2].
-    :return: CW bounding boxes. Sized [N, 2].
-    """
     bbox_lr = np.asarray(bbox_lr, dtype=np.float32).reshape((-1, 2))
     center = (bbox_lr[:, 0] + bbox_lr[:, 1]) / 2
     width = bbox_lr[:, 1] - bbox_lr[:, 0]
@@ -19,11 +14,6 @@ def lr2cw(bbox_lr: np.ndarray) -> np.ndarray:
 
 
 def cw2lr(bbox_cw: np.ndarray) -> np.ndarray:
-    """Convert bounding boxes from center-width (CW) to left-right (LR) format.
-
-    :param bbox_cw: CW bounding boxes. Sized [N, 2].
-    :return: LR bounding boxes. Sized [N, 2].
-    """
     bbox_cw = np.asarray(bbox_cw, dtype=np.float32).reshape((-1, 2))
     left = bbox_cw[:, 0] - bbox_cw[:, 1] / 2
     right = bbox_cw[:, 0] + bbox_cw[:, 1] / 2
@@ -32,7 +22,6 @@ def cw2lr(bbox_cw: np.ndarray) -> np.ndarray:
 
 
 def seq2bbox(sequence: np.ndarray) -> np.ndarray:
-    """Generate CW bbox from binary sequence mask"""
     sequence = np.asarray(sequence, dtype=bool)
     selected_indices, = np.where(sequence == 1)
 
@@ -47,12 +36,6 @@ def seq2bbox(sequence: np.ndarray) -> np.ndarray:
 
 
 def iou_lr(anchor_bbox: np.ndarray, target_bbox: np.ndarray) -> np.ndarray:
-    """Compute iou between multiple LR bbox pairs.
-
-    :param anchor_bbox: LR anchor bboxes. Sized [N, 2].
-    :param target_bbox: LR target bboxes. Sized [N, 2].
-    :return: IoU between each bbox pair. Sized [N].
-    """
     anchor_left, anchor_right = anchor_bbox[:, 0], anchor_bbox[:, 1]
     target_left, target_right = target_bbox[:, 0], target_bbox[:, 1]
 
@@ -71,7 +54,6 @@ def iou_lr(anchor_bbox: np.ndarray, target_bbox: np.ndarray) -> np.ndarray:
 
 
 def iou_cw(anchor_bbox: np.ndarray, target_bbox: np.ndarray) -> np.ndarray:
-    """Compute iou between multiple CW bbox pairs. See ``iou_lr``"""
     anchor_bbox_lr = cw2lr(anchor_bbox)
     target_bbox_lr = cw2lr(target_bbox)
     return iou_lr(anchor_bbox_lr, target_bbox_lr)
@@ -80,14 +62,6 @@ def iou_cw(anchor_bbox: np.ndarray, target_bbox: np.ndarray) -> np.ndarray:
 def nms(scores: np.ndarray,
         bboxes: np.ndarray,
         thresh: float) -> Tuple[np.ndarray, np.ndarray]:
-    """Non-Maximum Suppression (NMS) algorithm on 1D bbox.
-
-    :param scores: List of confidence scores for bboxes. Sized [N].
-    :param bboxes: List of LR bboxes. Sized [N, 2].
-    :param thresh: IoU threshold. Overlapped bboxes with IoU higher than this
-        threshold will be filtered.
-    :return: Remaining bboxes and its scores.
-    """
     valid_idx = bboxes[:, 0] < bboxes[:, 1]
     scores = scores[valid_idx]
     bboxes = bboxes[valid_idx]

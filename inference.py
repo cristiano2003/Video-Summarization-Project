@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 import torch
 import argparse
-from src.helpers import init_helper, vsumm_helper, bbox_helper, video_helper
-from src.modules.model_zoo import get_model
+from src.helpers import vsumm_helper, bbox_helper, video_helper
+from src.modules.model_get import get_model
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -36,7 +36,6 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--num-feature', type=int, default=1024)
     parser.add_argument('--num-hidden', type=int, default=128)
 
-    # anchor based
     parser.add_argument('--neg-sample-ratio', type=float, default=2.0)
     parser.add_argument('--incomplete-sample-ratio', type=float, default=1.0)
     parser.add_argument('--pos-iou-thresh', type=float, default=0.6)
@@ -44,8 +43,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('--incomplete-iou-thresh', type=float, default=0.3)
     parser.add_argument('--anchor-scales', type=int, nargs='+',
                         default=[4, 8, 16, 32])
-
-    # anchor free
+    
     parser.add_argument('--lambda-ctr', type=float, default=1.0)
     parser.add_argument('--cls-loss', type=str, default='focal',
                         choices=['focal', 'cross-entropy'])
@@ -59,7 +57,6 @@ def main():
     parser  =  get_parser()
     args = parser.parse_args()
     
-    # load model
     print('Loading DSNet model ...')
     model = get_model(args.model, **vars(args))
     model = model.eval().to(args.device)
@@ -67,7 +64,6 @@ def main():
                             map_location=lambda storage, loc: storage)
     model.load_state_dict(state_dict)
 
-    # load video
     print('Preprocessing source video ...')
     video_proc = video_helper.VideoPreprocessor(args.sample_rate)
     n_frames, seq, cps, nfps, picks = video_proc.run(args.source)
@@ -87,13 +83,13 @@ def main():
 
     print('Writing summary video ...')
 
-    # load original video
+
     cap = cv2.VideoCapture(args.source)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     fps = cap.get(cv2.CAP_PROP_FPS)
 
-    # create summary video writer
+
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(args.save_path, fourcc, fps, (width, height))
 
