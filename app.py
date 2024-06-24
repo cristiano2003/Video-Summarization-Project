@@ -64,11 +64,11 @@ def main(model):
     args = parser.parse_args()
     if model == 'Anchor-based': 
         args.model = 'anchor-based'
-        args.ckpt_path = 'checkpoint/summe.yml.1.pt'
+        args.ckpt_path = 'checkpoints/tvsum_ab.ckpt'
         
     else: 
         args.model = 'anchor-free'
-        args.ckpt_path = 'checkpoint_af/summe.yml.1.pt'
+        args.ckpt_path = 'checkpoints/tvsum_af.ckpt'
     
     # load model
     print('Loading DSNet model ...')
