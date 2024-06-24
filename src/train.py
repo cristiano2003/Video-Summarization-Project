@@ -83,7 +83,6 @@ def main():
     data_helper.dump_yaml(vars(args), model_dir / 'args.yml')
     
     
-    
     for split_path in args.splits:
         split_path = Path(split_path)
         splits = data_helper.load_yaml(split_path)

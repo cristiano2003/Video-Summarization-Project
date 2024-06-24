@@ -1,5 +1,3 @@
-import logging
-
 import torch
 import wandb
 from . import anchor_free_helper
@@ -7,7 +5,6 @@ from .dsnet_af import DSNetAF
 from .losses import calc_ctr_loss, calc_cls_loss, calc_loc_loss
 from ..evaluate import evaluate
 from ..helpers import data_helper, vsumm_helper
-
 
 
 

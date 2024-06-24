@@ -26,7 +26,6 @@ class SelfAttention(nn.Module):
         self.drop50 = nn.Dropout(0.5)
 
 
-
     def forward(self, x):
         n = x.shape[0]  # sequence length
 

@@ -113,5 +113,5 @@ def focal_loss(x: torch.Tensor,
 
 
 def focal_loss_with_logits(x, y, reduction='sum'):
-    """Compute focal loss with logits input"""
+    
     return focal_loss(x.sigmoid(), y, reduction=reduction)
