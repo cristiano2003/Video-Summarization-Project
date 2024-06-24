@@ -21,7 +21,7 @@ pip install protobuf==3.20.1
 
 ```bash
 
-!python -m src.train anchor-free --splits ./splits/tvsum.yml --dataset tvsum 
+python -m src.train anchor-free --splits ./splits/tvsum.yml --dataset tvsum 
 
 ```
 
@@ -29,7 +29,7 @@ pip install protobuf==3.20.1
 
 ```bash
 
-!python app.py
+python app.py
 
 ```
 
